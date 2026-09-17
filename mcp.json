@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "kb": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@harrylabsj/kiwi@0.8.0",
+        "mcp",
+        "serve"
+      ]
+    }
+  }
+}
