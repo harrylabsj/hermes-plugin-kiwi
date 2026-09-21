@@ -14,7 +14,10 @@ install ships:
   config.yaml.
 - `skills/kiwi-buyer/` — the sourcing workflow skill: when to use which tool,
   the search → RFQ → negotiate → agreement → handoff loop, CommerceIntent
-  rules, and the authorization/error-handling contract.
+  rules, and the authorization/error-handling contract. English is the
+  default and authoritative version ([SKILL.md](skills/kiwi-buyer/SKILL.md));
+  a Chinese translation ships as
+  [SKILL.zh-CN.md](skills/kiwi-buyer/SKILL.zh-CN.md).
 
 ## Install
 
