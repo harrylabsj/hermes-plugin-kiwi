@@ -6,6 +6,13 @@ A2A commerce runtime for supplier discovery, RFQ fan-out, negotiation,
 non-binding agreements and trade handoff. Kiwi never handles payments and
 never places orders.
 
+Sourcing searches are **dual-source**: Kiwi Network results come from
+`kiwi_search`, and — when the session has web search / page-reading tools
+enabled — the skill also reports internet e-commerce listings as a separate,
+labelled section. The internet path is a host capability, not a guarantee of
+this plugin: when those tools are unavailable the skill says the internet side
+was not searched instead of implying it was.
+
 This is a portable [Agent Plugins v1](https://agent-plugins.org) package. One
 install ships:
 
@@ -13,11 +20,12 @@ install ships:
   new session while the plugin is enabled. No `mcp_servers` edits in
   config.yaml.
 - `skills/kiwi-buyer/` — the sourcing workflow skill: when to use which tool,
-  the search → RFQ → negotiate → agreement → handoff loop, CommerceIntent
-  rules, and the authorization/error-handling contract. English is the
-  default and authoritative version ([SKILL.md](skills/kiwi-buyer/SKILL.md));
-  a Chinese translation ships as
-  [SKILL.zh-CN.md](skills/kiwi-buyer/SKILL.zh-CN.md).
+  the search → RFQ → negotiate → agreement → handoff loop, dual-source rules
+  (source separation, `network_search` query status, price kinds, the ban on
+  sending internet listings into an RFQ), CommerceIntent rules, and the
+  authorization/error-handling contract. English is the default and
+  authoritative version ([SKILL.md](skills/kiwi-buyer/SKILL.md)); a Chinese
+  translation ships as [SKILL.zh-CN.md](skills/kiwi-buyer/SKILL.zh-CN.md).
 
 ## Install
 
@@ -48,14 +56,17 @@ EOF
 
 ## What you get
 
-9 tools: `kiwi_search` (supplier discovery), `kiwi_request_quotes` (RFQ),
+The pinned runtime (`@harrylabsj/kiwi@0.8.0`) exposes 9 tools: `kiwi_search`
+(supplier discovery, Kiwi Network only), `kiwi_request_quotes` (RFQ),
 `kiwi_get_task`, `kiwi_negotiate`, `kiwi_accept_agreement`, `kiwi_get_agreement`,
-`kiwi_handoff`, plus the `kiwi_approve` / `kiwi_reject` approval gates.
+`kiwi_handoff`, plus the `kiwi_approve` / `kiwi_reject` approval gates. Newer
+runtime versions add the pull-subscription tools
+(`kiwi_follow_merchant` / `kiwi_unfollow_merchant` / `kiwi_list_follows` /
+`kiwi_get_follow_updates`); the tool set always follows the pinned version, not
+this README.
 
-Hermes exposes them as `mcp__agent_plugin_kiwi_<hash>__kb__<tool>`. The server
-key is `kb` rather than `kiwi` so the longest tool name
-(`kiwi_accept_agreement`) stays at 58 characters — clear of the 64-character
-function-name cap of OpenAI-compatible wire formats.
+Hermes exposes them as `mcp__kb__<tool>` (the server key is `kb`; Hermes does
+not namespace MCP tools by plugin).
 
 ## How it works
 

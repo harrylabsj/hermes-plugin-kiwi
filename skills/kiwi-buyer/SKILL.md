@@ -1,7 +1,7 @@
 ---
 name: kiwi-buyer
 description: Kiwi Sourcing & Negotiation Kit. Use when the user wants to source general goods, find suppliers, send RFQs, compare quotes, negotiate, or ask about lead times/MOQ. Covers discovery, RFQ, negotiation, non-binding agreements and trade handoff through the kiwi-buyer-mcp tools.
-version: 0.2.0
+version: 0.3.0
 author: harrylabsj
 license: Apache-2.0
 metadata:
@@ -29,7 +29,7 @@ authoritative version.
 
 | User intent | Tool |
 |---|---|
-| Find merchants or suppliers | `kiwi_search` |
+| Find merchants or suppliers (Kiwi Network only) | `kiwi_search` |
 | Request quotes (RFQ) | `kiwi_request_quotes` |
 | Check quotes and task status | `kiwi_get_task` |
 | Counter-offer or clarify | `kiwi_negotiate` |
@@ -52,6 +52,60 @@ Typical flow:
    `approval_id`.
 6. Verify the agreement and digest with `kiwi_get_agreement`, then call
    `kiwi_handoff`.
+
+## Dual-source search (network merchants + internet e-commerce)
+
+A sourcing search covers two sources by default, presented and labelled
+separately — never merged into one list whose origin cannot be told:
+
+| Source | Display name | Provided by |
+|---|---|---|
+| Kiwi Network | Kiwi Network · network merchants | `kiwi_search` (this tool covers only this source) |
+| Internet e-commerce | Internet e-commerce · platform listings | the host's own web search / page-reading tools; if this session has none, say the internet side was not searched and do not claim a dual-source search |
+
+- When the user restricts the source ("Kiwi Network only"), search only that
+  source and never imply the other one was searched. If both are available, run
+  both (in parallel when supported, otherwise in the same turn).
+- Show at most 3 most-relevant results per source by default, each with its own
+  query status; if one source finishes first you may show it while the other
+  stays "searching".
+- Internet results must carry the platform name and the original link, and only
+  entries traceable to a real product or shop may be listed. Do not mark
+  anything as verified unless that page was actually read, and never treat an
+  internet candidate as a Kiwi Network merchant.
+
+### Query status (`network_search`)
+
+`kiwi_search` returns `network_search` describing the true state of the Network
+path (`status`: `completed`/`partial`/`timeout`/`error`/`not_searched`;
+`result_state`: `has_candidates`/`no_match`/`undetermined`):
+
+- only `completed` + `no_match` may be worded as "no match this time";
+- `timeout`/`error` are failures ("cannot query right now; showing the other
+  source"), never "no suppliers";
+- `partial` (including `undetermined`) means coverage is incomplete; still show
+  what was found and name the differences;
+- `not_searched` means that source did not run (user-restricted or capability
+  unavailable) and must not be described as no match;
+- older runtimes return only `merchants` + `note`: a non-empty `note` means
+  incomplete coverage — say conservatively that the query did not fully
+  complete.
+
+### Price and confirmation status
+
+Never mix price kinds: page reference price (`page_reference`), merchant-listed
+price (`merchant_listed_price`), merchant quote (`merchant_quoted`), to be
+quoted (`to_be_quoted`). A listed price or a page price is not a quote; when a
+merchant confirmed only specifications, price, stock and lead time stay
+unconfirmed. Different currencies, units or quantity conditions do not allow
+picking a "lowest price", and unknown tax/shipping means no delivered total.
+
+### Boundary between search and RFQ
+
+Searching never sends an RFQ: internet listings have no Kiwi merchant identity —
+never put them in the `merchant_ids` of `kiwi_request_quotes`, and never apply
+Kiwi agreement or handoff status to them. Offer the original link or a prepared
+inquiry text instead.
 
 ## CommerceIntent rules
 
