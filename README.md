@@ -30,11 +30,11 @@ install ships:
 ## Install
 
 ```bash
-hermes plugins install kiwi       # from the Nous plugin catalog (once admitted)
+hermes plugins install kiwi       # from the Nous plugin catalog
 hermes plugins enable kiwi
 ```
 
-Before catalog admission, install straight from this repo:
+Alternatively, install straight from this repo:
 
 ```bash
 hermes plugins install https://github.com/harrylabsj/hermes-plugin-kiwi
@@ -43,27 +43,26 @@ hermes plugins enable kiwi
 
 Then start a new Hermes session. The skill is available via `skill_view`
 (`skills_list` shows the exact `agent-plugin-kiwi-…` name). Node.js/npm must
-be on `PATH` (the server is launched with `npx -y @harrylabsj/kiwi@0.8.0 mcp
+be on `PATH` (the server is launched with `npx -y @harrylabsj/kiwi@0.11.0 mcp
 serve`). The first launch downloads the pinned package.
 
 Health check without Hermes:
 
 ```bash
-npx -y @harrylabsj/kiwi@0.8.0 mcp serve <<'EOF'
+npx -y @harrylabsj/kiwi@0.11.0 mcp serve <<'EOF'
 {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"probe","version":"0"}}}
 EOF
 ```
 
 ## What you get
 
-The pinned runtime (`@harrylabsj/kiwi@0.8.0`) exposes 9 tools: `kiwi_search`
+The pinned runtime (`@harrylabsj/kiwi@0.11.0`) exposes 13 tools: `kiwi_search`
 (supplier discovery, Kiwi Network only), `kiwi_request_quotes` (RFQ),
 `kiwi_get_task`, `kiwi_negotiate`, `kiwi_accept_agreement`, `kiwi_get_agreement`,
-`kiwi_handoff`, plus the `kiwi_approve` / `kiwi_reject` approval gates. Newer
-runtime versions add the pull-subscription tools
-(`kiwi_follow_merchant` / `kiwi_unfollow_merchant` / `kiwi_list_follows` /
-`kiwi_get_follow_updates`); the tool set always follows the pinned version, not
-this README.
+`kiwi_handoff`, the `kiwi_approve` / `kiwi_reject` approval gates, and the
+merchant pull-subscription tools (`kiwi_follow_merchant` /
+`kiwi_unfollow_merchant` / `kiwi_list_follows` / `kiwi_get_follow_updates`).
+The tool set always follows the pinned version, not this README.
 
 Hermes exposes them as `mcp__kb__<tool>` (the server key is `kb`; Hermes does
 not namespace MCP tools by plugin).
@@ -85,7 +84,7 @@ not namespace MCP tools by plugin).
 
 ## Version pinning
 
-`mcp.json` pins `@harrylabsj/kiwi@0.8.0`. Bumping the pin is a commit to this
+`mcp.json` pins `@harrylabsj/kiwi@0.11.0`. Bumping the pin is a commit to this
 repo followed by a reviewed SHA bump in the
 [hermes-agent plugin catalog](https://github.com/NousResearch/hermes-agent/tree/main/plugin-catalog).
 `@latest` is deliberately not used.
