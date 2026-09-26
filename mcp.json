@@ -6,7 +6,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@harrylabsj/kiwi@0.8.0",
+        "@harrylabsj/kiwi@0.11.0",
         "mcp",
         "serve"
       ]
