@@ -43,20 +43,20 @@ hermes plugins enable kiwi
 
 Then start a new Hermes session. The skill is available via `skill_view`
 (`skills_list` shows the exact `agent-plugin-kiwi-…` name). Node.js/npm must
-be on `PATH` (the server is launched with `npx -y @harrylabsj/kiwi@0.12.7 mcp
+be on `PATH` (the server is launched with `npx -y @harrylabsj/kiwi@0.12.10 mcp
 serve`). The first launch downloads the pinned package.
 
 Health check without Hermes:
 
 ```bash
-npx -y @harrylabsj/kiwi@0.12.7 mcp serve <<'EOF'
+npx -y @harrylabsj/kiwi@0.12.10 mcp serve <<'EOF'
 {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"probe","version":"0"}}}
 EOF
 ```
 
 ## What you get
 
-The pinned runtime (`@harrylabsj/kiwi@0.12.7`) exposes 13 tools: `kiwi_search`
+The pinned runtime (`@harrylabsj/kiwi@0.12.10`) exposes 13 tools: `kiwi_search`
 (supplier discovery, Kiwi Network only), `kiwi_request_quotes` (RFQ),
 `kiwi_get_task`, `kiwi_negotiate`, `kiwi_accept_agreement`, `kiwi_get_agreement`,
 `kiwi_handoff`, the `kiwi_approve` / `kiwi_reject` approval gates, and the
@@ -84,7 +84,13 @@ not namespace MCP tools by plugin).
 
 ## Version pinning
 
-`mcp.json` pins `@harrylabsj/kiwi@0.12.7`. Bumping the pin is a commit to this
+`mcp.json` pins `@harrylabsj/kiwi@0.12.10`.
+
+The buyer is anonymous by default. To read protected results back (a
+merchant's `GetTask` behind the B-05 identity gate), export
+`KIWI_A2A_SIGNING_KEY_DIR` before launching Hermes — the server then signs every
+outbound A2A request with its persistent Ed25519 key, and the merchant has to
+trust that public key (its `a2a-trusted-keys.json`, loaded at startup). Bumping the pin is a commit to this
 repo followed by a reviewed SHA bump in the
 [hermes-agent plugin catalog](https://github.com/NousResearch/hermes-agent/tree/main/plugin-catalog).
 `@latest` is deliberately not used.
