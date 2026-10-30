@@ -43,26 +43,28 @@ hermes plugins enable kiwi
 
 Then start a new Hermes session. The skill is available via `skill_view`
 (`skills_list` shows the exact `agent-plugin-kiwi-…` name). Node.js/npm must
-be on `PATH` (the server is launched with `npx -y @harrylabsj/kiwi@0.12.10 mcp
-serve`). The first launch downloads the pinned package.
+be on `PATH` (the server is launched with `npx -y @harrylabsj/kiwi@latest mcp
+serve`). Each launch resolves the newest published release, so the first run
+after a Kiwi release downloads it — no plugin update needed.
 
 Health check without Hermes:
 
 ```bash
-npx -y @harrylabsj/kiwi@0.12.10 mcp serve <<'EOF'
+npx -y @harrylabsj/kiwi@latest mcp serve <<'EOF'
 {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"probe","version":"0"}}}
 EOF
 ```
 
 ## What you get
 
-The pinned runtime (`@harrylabsj/kiwi@0.12.10`) exposes 13 tools: `kiwi_search`
+The runtime (`@harrylabsj/kiwi@latest`) exposes 13 tools: `kiwi_search`
 (supplier discovery, Kiwi Network only), `kiwi_request_quotes` (RFQ),
 `kiwi_get_task`, `kiwi_negotiate`, `kiwi_accept_agreement`, `kiwi_get_agreement`,
 `kiwi_handoff`, the `kiwi_approve` / `kiwi_reject` approval gates, and the
 merchant pull-subscription tools (`kiwi_follow_merchant` /
 `kiwi_unfollow_merchant` / `kiwi_list_follows` / `kiwi_get_follow_updates`).
-The tool set always follows the pinned version, not this README.
+The tool set always follows what `@latest` resolves to, not this README — a
+runtime release can change it without any plugin change.
 
 Hermes exposes them as `mcp__kb__<tool>` (the server key is `kb`; Hermes does
 not namespace MCP tools by plugin).
@@ -84,7 +86,8 @@ not namespace MCP tools by plugin).
 
 ## Version pinning
 
-`mcp.json` pins `@harrylabsj/kiwi@0.12.10`.
+`mcp.json` launches `@harrylabsj/kiwi@latest` — floating, the newest
+published runtime on every start.
 
 The buyer is anonymous by default. To read protected results back (a
 merchant's `GetTask` behind the B-05 identity gate), export
