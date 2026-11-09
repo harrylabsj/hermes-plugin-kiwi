@@ -99,5 +99,10 @@ Buyer 只经 catalog 发现商家，再通过 A2A 直连 merchant；不要检查
 - `kiwi_accept_agreement` 和 `kiwi_handoff` 默认需要用户授权；不得让模型自行批准。
 - `authorization_denied`、`approval_denied` 是硬拒绝，不要自动重试。
 - `task_not_found`、`task_expired` 需要重新查询或重新询价。
+- `below_floor` 只表示该价格低于商家当前可接受范围；`approval_required` 是等待商家审批，
+  不是拒绝。不能把任一种错误统一说成“商家不议价/固定价”，也不能只凭 30/100 两个数量
+  推断 500 件同价；固定价结论需要商品资料价、商家规则或多次同价报价等证据。
+- `merchant_inquiry_unavailable` 表示商家仅有公开资料、未开通实时询价；不要重试询价。
+- 金额写清单位（如“70 元/盒”）与有效期。
 - `partial_success` 时保留成功报价，并单独提示失败项。
 - 交易 handoff 只生成后续入口；在用户付款前应核验目标 URL，并明确说明 Kiwi 本身没有完成支付或下单。

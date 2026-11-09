@@ -147,6 +147,15 @@ Prefer short product words in the item `query`; move specifications into
 - `authorization_denied` and `approval_denied` are hard refusals — do not
   retry them automatically.
 - `task_not_found` and `task_expired` require re-querying or re-quoting.
+- `below_floor` means only that this price is below the merchant's current
+  acceptable range; `approval_required` is waiting for merchant review, not a
+  rejection. Never describe either as "the merchant does not negotiate / has a
+  fixed price", and never extrapolate from 30/100 units to 500 units. A
+  fixed-price conclusion needs listed price, merchant policy, or repeated
+  same-price quotes as evidence.
+- `merchant_inquiry_unavailable`: the merchant has only a public profile and no
+  live inquiry; do not retry the RFQ.
+- State the unit (e.g. "CNY 70 / box") and validity window.
 - On `partial_success`, keep the successful quotes and report the failed
   items separately.
 - A trade handoff only produces a next-step entry point; verify the target
