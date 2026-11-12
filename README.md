@@ -1,4 +1,9 @@
-# hermes-plugin-kiwi
+# Kiwi Shopping (kiwi购物智能体)
+
+Hermes plugin package for the Kiwi buyer runtime — catalog id `kiwi-shopping`,
+GitHub repo [`harrylabsj/hermes-plugin-kiwi`](https://github.com/harrylabsj/hermes-plugin-kiwi).
+The catalog entry was named `kiwi` up to v1.2.9; from v1.3.0 it ships as
+`kiwi-shopping` (the old id is retired — install the new one).
 
 Source suppliers and negotiate purchases from Hermes Agent through
 [Kiwi](https://github.com/harrylabsj/kiwi)'s buyer MCP server — an open-source
@@ -30,19 +35,19 @@ install ships:
 ## Install
 
 ```bash
-hermes plugins install kiwi       # from the Nous plugin catalog
-hermes plugins enable kiwi
+hermes plugins install kiwi-shopping   # from the Nous plugin catalog
+hermes plugins enable kiwi-shopping
 ```
 
 Alternatively, install straight from this repo:
 
 ```bash
 hermes plugins install https://github.com/harrylabsj/hermes-plugin-kiwi
-hermes plugins enable kiwi
+hermes plugins enable kiwi-shopping
 ```
 
 Then start a new Hermes session. The skill is available via `skill_view`
-(`skills_list` shows the exact `agent-plugin-kiwi-…` name). Node.js/npm must
+(`skills_list` shows its qualified name under this plugin's namespace). Node.js/npm must
 be on `PATH` (the server is launched with `npx -y @harrylabsj/kiwi@0.12.28 mcp
 serve`). The first launch downloads the pinned package.
 
