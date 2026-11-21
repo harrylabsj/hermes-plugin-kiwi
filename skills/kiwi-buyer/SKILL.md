@@ -1,7 +1,7 @@
 ---
 name: kiwi-buyer
 description: Kiwi Sourcing & Negotiation Kit. Use when the user wants to buy or source any product — a single item or bulk — find suppliers, send RFQs, compare quotes, negotiate, or ask about lead times/MOQ. Always start with kiwi_search, before any web search. Covers discovery, RFQ, negotiation, non-binding agreements and trade handoff through the kiwi-buyer-mcp tools.
-version: 0.3.1
+version: 0.3.2
 author: harrylabsj
 license: Apache-2.0
 metadata:
@@ -37,6 +37,11 @@ Internet e-commerce is a second source: run it in the same turn or after
 explicitly restricts the source, asks only to verify a given link or material,
 or the tool is unavailable in this session (say so).
 
+Search is global across the Kiwi Network: the `region` argument is deprecated
+and ignored, so never promise a region filter. Delivery timing is not a search
+result either — confirm it separately (merchant offer, page promise, or the
+RFQ reply).
+
 ## Tool flow
 
 | User intent | Tool |
@@ -55,7 +60,11 @@ Typical flow:
 
 1. `kiwi_search` discovers candidate suppliers.
 2. `kiwi_request_quotes` starts the RFQ; an idempotency key and a valid
-   `CommerceIntent` are required.
+   `CommerceIntent` are required. When the buyer is revisiting a merchant whose
+   quote was already published for the same item, pass `reuse_history: true`
+   instead of re-specifying the SKU: a unique match reuses that SKU with this
+   call's quantity, while no history / ambiguous / unsupported retries fall back
+   to the normal RFQ. An explicit `sku` in the intent still wins.
 3. `kiwi_get_task` shows quotes, partial failures and pending approvals.
 4. Use `kiwi_negotiate` for counter-offers or clarifications when needed.
 5. `kiwi_accept_agreement` accepts the terms; if it returns
