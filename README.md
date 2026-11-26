@@ -48,20 +48,20 @@ hermes plugins enable kiwi-shopping
 
 Then start a new Hermes session. The skill is available via `skill_view`
 (`skills_list` shows its qualified name under this plugin's namespace). Node.js/npm must
-be on `PATH` (the server is launched with `npx -y @harrylabsj/kiwi@0.12.32 mcp
+be on `PATH` (the server is launched with `npx -y @harrylabsj/kiwi@0.12.40 mcp
 serve`). The first launch downloads the pinned package.
 
 Health check without Hermes:
 
 ```bash
-npx -y @harrylabsj/kiwi@0.12.32 mcp serve <<'EOF'
+npx -y @harrylabsj/kiwi@0.12.40 mcp serve <<'EOF'
 {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"probe","version":"0"}}}
 EOF
 ```
 
 ## What you get
 
-The pinned runtime (`@harrylabsj/kiwi@0.12.32`) exposes 13 tools: `kiwi_search`
+The pinned runtime (`@harrylabsj/kiwi@0.12.40`) exposes 13 tools: `kiwi_search`
 (supplier discovery, Kiwi Network only), `kiwi_request_quotes` (RFQ),
 `kiwi_get_task`, `kiwi_negotiate`, `kiwi_accept_agreement`, `kiwi_get_agreement`,
 `kiwi_handoff`, the `kiwi_approve` / `kiwi_reject` approval gates, and the
@@ -89,7 +89,7 @@ not namespace MCP tools by plugin).
 
 ## Version pinning
 
-`mcp.json` pins `@harrylabsj/kiwi@0.12.32`.
+`mcp.json` pins `@harrylabsj/kiwi@0.12.40`.
 
 The buyer is anonymous by default. To read protected results back (a
 merchant's `GetTask` behind the B-05 identity gate), export

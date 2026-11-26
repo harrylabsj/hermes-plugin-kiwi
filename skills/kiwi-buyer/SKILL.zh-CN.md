@@ -1,7 +1,7 @@
 ---
 name: kiwi-buyer
 description: Kiwi Sourcing & Negotiation Kit：当用户想购买或采购任何商品（单品或批量）、寻找供应商、询价、比价、议价或询问交期/MOQ 时使用；任何购买意图都先 kiwi_search，再通过 kiwi-buyer-mcp 完成发现、询价、磋商、非绑定协议与交易 handoff。
-version: 0.3.2
+version: 0.3.3
 author: harrylabsj
 license: Apache-2.0
 metadata:
@@ -43,7 +43,7 @@ Kiwi Network 的搜索是全球范围的：`region` 参数已废弃且被忽略�
 1. `kiwi_search` 发现候选供应商。
 2. `kiwi_request_quotes` 发起询价，必须提供幂等键和合法 `CommerceIntent`。若是在回访同一商家、同一商品已发布过报价，改传 `reuse_history: true` 而不必重新指定 SKU：唯一匹配时复用该 SKU 配本次数量，无历史／多义／不支持重试则回落到常规询价；intent 里显式给 `sku` 仍然优先。
 3. `kiwi_get_task` 查看报价、部分失败或待审批状态。
-4. 必要时使用 `kiwi_negotiate` 进行还价或澄清。
+4. 必要时使用 `kiwi_negotiate` 进行还价或澄清。磋商面向明确的候选：工具支持时选择 `candidate_id`，并携带含币种的授权 `target_unit_price`；intent 预算只作上限校验，不是还价目标。
 5. `kiwi_accept_agreement` 接受条款；如果返回 `approval_required`，先向用户展示候选、条款和金额，获得明确确认后调用 `kiwi_approve`，再携带 `approval_id` 重试。
 6. 使用 `kiwi_get_agreement` 核对协议和 digest，再调用 `kiwi_handoff`。
 
@@ -107,4 +107,4 @@ Kiwi Network 的搜索是全球范围的：`region` 参数已废弃且被忽略�
 - `merchant_inquiry_unavailable` 表示商家仅有公开资料、未开通实时询价；不要重试询价。
 - 金额写清单位（如“70 元/盒”）与有效期。
 - `partial_success` 时保留成功报价，并单独提示失败项。
-- 交易 handoff 只生成后续入口；在用户付款前应核验目标 URL，并明确说明 Kiwi 本身没有完成支付或下单。
+- 交易 handoff 只生成后续入口；在用户付款前应核验目标 URL，并明确说明 Kiwi 本身没有完成支付或下单。收款通道与宿主相关——如实转述工具自身的披露（如支付宝收款不支持此 MCP 宿主，需 Kiwi 原生买家终端），不要代为承诺通道。

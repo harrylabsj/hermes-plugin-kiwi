@@ -1,7 +1,7 @@
 ---
 name: kiwi-buyer
 description: Kiwi Sourcing & Negotiation Kit. Use when the user wants to buy or source any product — a single item or bulk — find suppliers, send RFQs, compare quotes, negotiate, or ask about lead times/MOQ. Always start with kiwi_search, before any web search. Covers discovery, RFQ, negotiation, non-binding agreements and trade handoff through the kiwi-buyer-mcp tools.
-version: 0.3.2
+version: 0.3.3
 author: harrylabsj
 license: Apache-2.0
 metadata:
@@ -67,6 +67,10 @@ Typical flow:
    to the normal RFQ. An explicit `sku` in the intent still wins.
 3. `kiwi_get_task` shows quotes, partial failures and pending approvals.
 4. Use `kiwi_negotiate` for counter-offers or clarifications when needed.
+   Negotiation targets an unambiguous candidate: where the tool supports it,
+   select the `candidate_id` and pass the authorized `target_unit_price` with
+   its currency; the intent budget acts as a ceiling check, not as the counter
+   target.
 5. `kiwi_accept_agreement` accepts the terms; if it returns
    `approval_required`, first show the user the candidates, terms and amounts,
    get explicit confirmation, call `kiwi_approve`, then retry with the
@@ -169,4 +173,7 @@ Prefer short product words in the item `query`; move specifications into
   items separately.
 - A trade handoff only produces a next-step entry point; verify the target
   URL before the user pays, and state clearly that Kiwi itself has neither
-  paid nor placed an order.
+  paid nor placed an order. Collection rails are host-dependent — relay the
+  tool's own disclosure (e.g. Alipay collection is not supported through this
+  MCP host and requires the native Kiwi buyer terminal) instead of promising a
+  rail.
